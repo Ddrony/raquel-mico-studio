@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raquel Martínez Micó | Studio de Belleza</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gold: #D9C5B2;
+            --soft-silk: #F2E8DF;
+            --deep-espresso: #2B1B17;
+            --accent-rose: #B07D62;
+            --glass-bg: rgba(242, 232, 223, 0.85); 
+            --font-head: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+            --radius-organic: 40px 10px 40px 10px;
+            --shadow-lux: 0 20px 40px rgba(43, 27, 23, 0.1);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --h2-size: clamp(1.8rem, 3vw, 2.5rem);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--soft-silk);
+            color: var(--deep-espresso);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
+            background: radial-gradient(circle, var(--accent-rose) 0%, transparent 70%);
+            opacity: 0.15;
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        header {
+            padding: 1rem 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(43, 27, 23, 0.05);
+        }
+
+        .logo img { max-height: 50px; width: auto; }
+
+        .nav-menu { position: relative; display: flex; align-items: center; }
+        .nav-list { display: flex; list-style: none; margin: 0; padding: 0; gap: 5px; }
+        .nav-item { position: relative; z-index: 2; }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--deep-espresso);
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 50px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .nav-item a svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+        .nav-item a:hover { background: rgba(43, 27, 23, 0.05); }
+        .nav-item.active a { color: var(--accent-rose); background: rgba(176, 125, 98, 0.1); }
+
+        .nav-indicator {
+            position: absolute;
+            bottom: 0; left: 0;
+            height: 3px;
+            background: var(--accent-rose);
+            border-radius: 3px;
+            transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1), width 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 0 15px var(--accent-rose);
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .nav-item a span { display: none; }
+            .nav-item a { padding: 8px 12px; }
+        }
+
+        .hero {
+            padding: 100px 10% 50px 10%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 60vh;
+        }
+
+        .hero-text { flex: 1; max-width: 600px; }
+
+        h1 {
+            font-family: var(--font-head);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .highlight { color: var(--accent-rose); font-style: italic; }
+
+        .services-container { padding: 60px 10%; }
+
+        .section-subtitle {
+            font-family: var(--font-head);
+            font-size: var(--h2-size);
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            color: var(--deep-espresso);
+        }
+
+        .section-subtitle::after {
+            content: "";
+            display: block;
+            width: 60px; height: 2px;
+            background: var(--accent-rose);
+            margin: 15px auto 0;
+            opacity: 0.6;
+        }
+
+        .procedures-carousel {
+            width: 100%;
+            max-width: 1000px;
+            height: 550px;
+            margin: 0 auto 60px auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-organic);
+            box-shadow: var(--shadow-lux);
+        }
+
+        .carousel-item {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .carousel-item.active { opacity: 1; z-index: 1; }
+        .carousel-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 3rem;
+            border-radius: var(--radius-organic);
+            box-shadow: var(--shadow-lux);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .card h3 { font-family: var(--font-head); margin-bottom: 1rem; font-size: 1.5rem; }
+        .card:hover { transform: translateY(-10px); border-color: var(--primary-gold); }
+
+        /* =============================================
+           MARQUEE — TÉCNICA DEFINITIVA (igual ao Resend)
+
+           COMO FUNCIONA:
+           Dois .marquee-content animam INDIVIDUALMENTE,
+           ambos de translateX(0) → translateX(-100%).
+
+           "-100%" = 100% da largura do PRÓPRIO elemento.
+           Como os dois sets têm largura idêntica e animam
+           em sincronia, quando ambos resetam ao mesmo tempo
+           o usuário não vê absolutamente nada — loop perfeito.
+
+           REGRA DE OURO:
+           O @keyframes usa -100%, NUNCA calc(-100% - Xrem).
+           O espaçamento entre cards usa margin-right no card,
+           NÃO gap no container (gap quebraria o -100%).
+        ============================================= */
+
+        .testimonials-section {
+            padding: 80px 0;
+            background-color: var(--soft-silk);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .section-title { text-align: center; margin-bottom: 50px; padding: 0 10%; }
+
+        .section-title h2 {
+            font-family: var(--font-head);
+            font-size: var(--h2-size);
+            color: var(--deep-espresso);
+            margin-bottom: 15px;
+        }
+
+        .decor-line {
+            width: 60px; height: 2px;
+            background: var(--accent-rose);
+            margin: 0 auto 15px;
+            opacity: 0.6;
+        }
+
+        /* Container: só faz overflow hidden */
+        .marquee-container {
+            display: flex;        /* coloca os dois sets lado a lado */
+            overflow: hidden;
+            user-select: none;
+            padding: 20px 0;
+            position: relative;
+        }
+
+        /* Cada set: anima individualmente até -100% da sua própria largura */
+        .marquee-content {
+            display: flex;
+            flex-shrink: 0;
+            animation: marquee 30s linear infinite;
+        }
+
+        /* Pausa ao hover */
+        .marquee-container:hover .marquee-content {
+            animation-play-state: paused;
+        }
+
+        /* Espaçamento via margin-right no card (NÃO gap no container) */
+        .testimonial-card {
+            background: white;
+            min-width: 320px;
+            max-width: 320px;
+            min-height: 220px;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lux);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-right: 2rem; /* espaço faz parte do card, não do container */
+        }
+
+        /*
+         * A CHAVE: -100% = 100% da largura do próprio .marquee-content
+         * Ambos os sets têm largura idêntica e resetam simultaneamente
+         * → o olho humano não detecta o salto. Loop matematicamente perfeito.
+         *
+         * NUNCA usar calc(-100% - Xrem): o "Xrem" extra quebra a simetria.
+         */
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-100%); }
+        }
+
+        /* Fade nas bordas */
+        .testimonials-section::before,
+        .testimonials-section::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 150px; height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .testimonials-section::before { left: 0;  background: linear-gradient(to right, var(--soft-silk), transparent); }
+        .testimonials-section::after  { right: 0; background: linear-gradient(to left,  var(--soft-silk), transparent); }
+
+        .testimonial-author { display: flex; align-items: center; gap: 12px; }
+        .author-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+        .author-info h3 { font-size: 1rem; margin: 0; }
+        .author-info p  { font-size: 0.85rem; color: #666; margin: 0; }
+
+        .info-section {
+            background: var(--deep-espresso);
+            color: var(--soft-silk);
+            padding: 80px 10%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+            border-radius: 60px 60px 0 0;
+        }
+
+        .map-container {
+            width: 100%; height: 200px;
+            background-image: linear-gradient(rgba(43,27,23,0.4), rgba(43,27,23,0.4)), url('imagens/mapa-estatico.webp');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-decoration: none; color: white;
+            transition: var(--transition);
+            border: 1px solid rgba(217, 197, 178, 0.3);
+        }
+        .map-container:hover { transform: scale(1.02); }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px; right: 30px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            width: 65px; height: 65px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 15px 30px rgba(18, 140, 126, 0.3);
+            z-index: 1000;
+            animation: float-animation 3s ease-in-out infinite;
+        }
+
+        @keyframes float-animation {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-15px); }
+        }
+
+        @media (max-width: 768px) {
+            .hero { flex-direction: column; text-align: center; padding: 50px 5%; }
+            .info-section { grid-template-columns: 1fr; }
+            .procedures-carousel { height: 350px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="imagens/logo_raquelmico.webp" alt="Raquel Micó Logo">
+        </div>
+        <nav class="nav-menu">
+            <ul class="nav-list" id="navList">
+                <li class="nav-item" data-url="#inicio"><a href="#inicio">
+                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-5v-6H9v6H5a2 2 0 0 1-2-2V9z"/></svg>
+                    <span>Inicio</span>
+                </a></li>
+                <li class="nav-item" data-url="#servicios"><a href="#servicios">
+                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-4.5L15 4H9L8.5 7H4v2h16V7z"/><rect x="4" y="11" width="16" height="10" rx="1" ry="1"/></svg>
+                    <span>Servicios</span>
+                </a></li>
+                <li class="nav-item" data-url="#contacto"><a href="#contacto">
+                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8 10a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span>Horarios y Contacto</span>
+                </a></li>
+                <li class="nav-item" data-url="https://www.instagram.com/raquelmicostudio/"><a href="https://www.instagram.com/raquelmicostudio/" target="_blank">
+                    <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    <span>Instagram</span>
+                </a></li>
+            </ul>
+            <div class="nav-indicator" id="navIndicator"></div>
+        </nav>
+    </header>
+
+    <section class="hero" id="inicio">
+        <div class="hero-text">
+            <h1>Especialista en <span class="highlight">Color</span> y Alisados de Lujo.</h1>
+            <p>Raquel Martínez Micó ofrece asesoramiento personalizado para transformar tu imagen con los mejores productos del mercado internacional.</p>
+        </div>
+    </section>
+
+    <section class="services-container" id="servicios">
+        <h2 class="section-subtitle">Nuestros procedimientos</h2>
+        <div class="procedures-carousel">
+            <div class="carousel-item active"><img src="imagens/procedimientos1.webp" alt="Procedimiento 1"></div>
+            <div class="carousel-item"><img src="imagens/procedimientos2.webp" alt="Procedimiento 2"></div>
+            <div class="carousel-item"><img src="imagens/procedimientos3.webp" alt="Procedimiento 3"></div>
+            <div class="carousel-item"><img src="imagens/procedimientos4.webp" alt="Procedimiento 4"></div>
+            <div class="carousel-item"><img src="imagens/procedimientos5.webp" alt="Procedimiento 5"></div>
+        </div>
+        <div class="services-grid">
+            <div class="card">
+                <h3>Colorimetría</h3>
+                <p>Técnicas avanzadas para un color vibrante, sano y con un brillo inigualable.</p>
+            </div>
+            <div class="card">
+                <h3>Alisados</h3>
+                <p>Tratamientos de alisado orgánico y térmico que cuidan la fibra capilar.</p>
+            </div>
+            <div class="card">
+                <h3>Asesoría</h3>
+                <p>Cada rostro y cabello es único. Diseñamos un plan de tratamiento exclusivo para ti.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials-section">
+        <div class="section-title">
+            <h2>Lo que dicen nuestras clientas</h2>
+            <div class="decor-line"></div>
+            <p>Experiencias reales</p>
+        </div>
+
+        <div class="marquee-container">
+
+            <!-- SET ORIGINAL — anima individualmente -->
+            <div class="marquee-content">
+                <div class="testimonial-card">
+                    <div class="testimonial-author">
+                        <img src="https://lh3.googleusercontent.com/a-/ALV-UjVetr5MqXPHVWLJ_ka6-5e7elN1DeTxoSYTMXSuIKWorm83iFXuHQ=w58-h58-p-rp-mo-br100" class="author-avatar" alt="Cliente">
+                        <div class="author-info"><h3>Anniegp Ruiz</h3><p>Google Reseñas ★★★★★</p></div>
+                    </div>
+                    <p class="testimonial-text">"Es un auténtico lujo poder ser atendida por una mujer tan profesional como Raquel, me ha hecho un trabajo excelente y con una atención totalmente personalizada..."</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-author">
+                        <img src="https://lh3.googleusercontent.com/a-/ALV-UjUe4B0z0VzTqQCXRaTehCjwm2kQdP1FakSYGN5FV7A62FOqVmei=w58-h58-p-rp-mo-br100" class="author-avatar" alt="Cliente">
+                        <div class="author-info"><h3>Mamen</h3><p>Google Reseñas ★★★★★</p></div>
+                    </div>
+                    <p class="testimonial-text">"Encantada con mi nueva peluquería! Raquel ha entendido perfectamente mí pelo, te asesora de lo mejor para ti y me ha hecho un corte de pelo y peinado muy juvenil y favorecedor. Gracias Raquel!"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="author-avatar" alt="Cliente">
+                        <div class="author-info"><h3>Sofia Rodriguez</h3><p>Google Reseñas ★★★★★</p></div>
+                    </div>
+                    <p class="testimonial-text">"El asesoramiento personalizado de Raquel marca la diferença. No solo te hacen el servicio, te enseñan a cuidar tu melena."</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" class="author-avatar" alt="Cliente">
+                        <div class="author-info"><h3>Laura García</h3><p>Google Reseñas ★★★★★</p></div>
+                    </div>
+                    <p class="testimonial-text">"Ambiente de lujo y trato exquisito. Los productos que utilizan son de primerísima calidad internacional."</p>
+                </div>
+            </div>
+
+            <!-- SET DUPLICADO — mesma animação, em sincronia -->
+            <div class="marquee-content" aria-hidden="true">
+                <div class="testimonial-card">
+                    <div class="testimonial-author">
+                        <img src="https://lh3.googleusercontent.com/a-/ALV-UjVetr5MqXPHVWLJ_ka6-5e7elN1DeTxoSYTMXSuIKWorm83iFXuHQ=w58-h58-p-rp-mo-br100" class="author-avatar" alt="Cliente">
+                        <div class="author-info"><h3>Anniegp Ruiz</h3><p>Google Reseñas ★★★★★</p></div>
+                    </div>
+                    <p class="testimonial-text">"Es un auténtico lujo poder ser atendida por una mujer tan profesional como Raquel, me ha hecho un trabajo excelente y con una atención totalmente personalizada..."</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-author">
+                        <img src="https://lh3.googleusercontent.com/a-/ALV-UjUe4B0z0VzTqQCXRaTehCjwm2kQdP1FakSYGN5FV7A62FOqVmei=w58-h58-p-rp-mo-br100" class="author-avatar" alt="Cliente">
+                        <div class="author-info"><h3>Mamen</h3><p>Google Reseñas ★★★★★</p></div>
+                    </div>
+                    <p class="testimonial-text">"Encantada con mi nueva peluquería! Raquel ha entendido perfectamente mí pelo, te asesora de lo mejor para ti y me ha hecho un corte de pelo y peinado muy juvenil y favorecedor. Gracias Raquel!"</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="author-avatar" alt="Cliente">
+                        <div class="author-info"><h3>Sofia Rodriguez</h3><p>Google Reseñas ★★★★★</p></div>
+                    </div>
+                    <p class="testimonial-text">"El asesoramiento personalizado de Raquel marca la diferença. No solo te hacen el servicio, te enseñan a cuidar tu melena."</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" class="author-avatar" alt="Cliente">
+                        <div class="author-info"><h3>Laura García</h3><p>Google Reseñas ★★★★★</p></div>
+                    </div>
+                    <p class="testimonial-text">"Ambiente de lujo y trato exquisito. Los productos que utilizan son de primerísima calidad internacional."</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    
+    <footer class="info-section" id="contacto">
+        <div>
+            <h2>Visítanos</h2>
+            <p style="margin: 38px 0;">Haz clic en el mapa para iniciar la navegación:</p>
+            <a href="https://maps.app.goo.gl/ZbeWTWL2M5fyqQe1A" target="_blank" class="map-container">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="white" style="margin-bottom: 10px;">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <div style="text-align: center;">
+                    <strong>VER UBICACIÓN</strong><br>
+                    <span style="font-size: 0.8rem;">Madrid, España</span>
+                </div>
+            </a>
+        </div>
+        <div>
+            <h2>Horarios</h2>
+            <ul style="list-style: none; margin-top: 20px;">
+                <li style="padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">Miércoles a Viernes: 09:30 - 19:00</li>
+                <li style="padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">Sábado: 10:00 - 14:00</li>
+                <li style="padding: 15px 0; color: var(--primary-gold); font-weight: 600;">Domingo y Lunes: Cerrado</li>
+                <li style="padding: 25px 0; color: var(--primary-gold); font-weight: 600;">Tel: +34 614 076 896</li>
+            </ul>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/34614076896" class="whatsapp-float" target="_blank">
+        <svg width="65" height="65" viewBox="0 0 24 24" fill="white">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.001.332.005c.101.004.231-.037.362.27.13.307.448 1.097.487 1.177.039.08.065.173.011.281-.054.109-.08.188-.159.281-.08.094-.17.21-.243.281-.08.08-.162.166-.069.326.094.159.416.686.892 1.111.611.544 1.127.712 1.285.791.159.08.252.065.346-.044.094-.109.405-.47.513-.629.108-.159.217-.13.362-.08s.924.437 1.083.516c.159.08.267.12.307.187.039.065.039.375-.104.78z"/>
+        </svg>
+    </a>
+
+    <script>
+        function initCarousel() {
+            const slides = document.querySelectorAll('.carousel-item');
+            let current = 0;
+            if (slides.length === 0) return;
+            setInterval(() => {
+                slides[current].classList.remove('active');
+                current = (current + 1) % slides.length;
+                slides[current].classList.add('active');
+            }, 4000);
+        }
+
+        function initNavIndicator() {
+            const navList   = document.getElementById('navList');
+            const indicator = document.getElementById('navIndicator');
+            const navItems  = document.querySelectorAll('.nav-item');
+
+            function updateIndicator(targetItem) {
+                if (!targetItem) return;
+                const rect    = targetItem.getBoundingClientRect();
+                const navRect = navList.getBoundingClientRect();
+                indicator.style.left  = (rect.left - navRect.left) + 'px';
+                indicator.style.width = rect.width + 'px';
+            }
+
+            function setActiveFromHash() {
+                const hash = window.location.hash || '#inicio';
+                let activeItem = null;
+                navItems.forEach(item => {
+                    const link = item.querySelector('a');
+                    if (link.getAttribute('href') === hash) {
+                        item.classList.add('active');
+                        activeItem = item;
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                if (!activeItem && navItems.length > 0) {
+                    navItems[0].classList.add('active');
+                    activeItem = navItems[0];
+                }
+                updateIndicator(activeItem);
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    setTimeout(() => {
+                        navItems.forEach(i => i.classList.remove('active'));
+                        item.classList.add('active');
+                        updateIndicator(item);
+                    }, 10);
+                });
+            });
+
+            window.addEventListener('hashchange', setActiveFromHash);
+            window.addEventListener('resize', () => {
+                const active = document.querySelector('.nav-item.active');
+                if (active) updateIndicator(active);
+            });
+
+            setActiveFromHash();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCarousel();
+            initNavIndicator();
+        });
+    </script>
+</body>
+</html>
